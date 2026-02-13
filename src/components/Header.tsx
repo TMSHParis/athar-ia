@@ -10,7 +10,13 @@ export default function Header() {
           <span className="text-xl font-light text-accent">IA</span>
         </Link>
         <div className="flex items-center gap-4">
-          <nav>
+          <nav className="flex items-center gap-4">
+            <Link
+              href="/contribuer"
+              className="text-sm font-medium text-accent transition-colors hover:text-foreground"
+            >
+              Contribuer
+            </Link>
             <Link
               href="/a-propos"
               className="text-sm text-muted transition-colors hover:text-foreground"
