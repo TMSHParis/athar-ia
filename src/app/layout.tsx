@@ -24,13 +24,26 @@ export const metadata: Metadata = {
     "Découvrez les chaînes de mises en garde entre savants musulmans. Si un savant met en garde contre un autre, qui a mis en garde contre lui ?",
 };
 
+// Script pour appliquer le thème AVANT le rendu (évite le flash blanc en dark mode)
+const themeScript = `
+  (function() {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+  })();
+`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
+    <html lang="fr" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body
         className={`${inter.variable} ${notoNaskh.variable} font-sans antialiased`}
       >

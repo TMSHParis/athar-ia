@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
   return (
@@ -8,14 +9,17 @@ export default function Header() {
           <span className="text-xl font-bold text-primary">Athar</span>
           <span className="text-xl font-light text-accent">IA</span>
         </Link>
-        <nav>
-          <Link
-            href="/a-propos"
-            className="text-sm text-muted transition-colors hover:text-foreground"
-          >
-            À propos
-          </Link>
-        </nav>
+        <div className="flex items-center gap-4">
+          <nav>
+            <Link
+              href="/a-propos"
+              className="text-sm text-muted transition-colors hover:text-foreground"
+            >
+              À propos
+            </Link>
+          </nav>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );
