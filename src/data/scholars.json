@@ -1,0 +1,358 @@
+[
+  {
+    "id": "rabee-al-madkhali",
+    "name": "Cheikh Rabi' al-Madkhali",
+    "nameArabic": "الشيخ ربيع بن هادي المدخلي",
+    "bio": "Savant saoudien, ancien professeur à l'Université islamique de Médine, connu pour ses ouvrages sur le Jarh wa Ta'dil.",
+    "birthYear": 1931,
+    "country": "Arabie Saoudite",
+    "warnedBy": [
+      {
+        "scholarId": "muqbil-al-wadii",
+        "summary": "A émis des remarques sur certaines de ses positions dans le domaine du Jarh wa Ta'dil.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles de Cheikh Muqbil sur Cheikh Rabi'",
+            "description": "Remarques de Cheikh Muqbil concernant certaines positions."
+          }
+        ]
+      }
+    ],
+    "hasWarned": [
+      {
+        "scholarId": "abul-hasan-al-maribi",
+        "summary": "A mis en garde contre lui en raison de ses positions jugées contraires à la méthodologie salafie.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Réfutation de Cheikh Rabi' contre Abul-Hasan",
+            "description": "Ouvrage détaillant les erreurs relevées."
+          }
+        ]
+      },
+      {
+        "scholarId": "ali-al-halabi",
+        "summary": "A mis en garde contre lui sur des questions de méthodologie.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles de Cheikh Rabi' sur Ali al-Halabi",
+            "description": "Mise en garde méthodologique."
+          }
+        ]
+      },
+      {
+        "scholarId": "muhammad-al-imam",
+        "summary": "A émis des remarques sur certaines de ses positions.",
+        "sources": [
+          {
+            "type": "audio",
+            "title": "Audio de Cheikh Rabi' sur Cheikh Muhammad al-Imam",
+            "description": "Enregistrement audio contenant des remarques."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "muqbil-al-wadii",
+    "name": "Cheikh Muqbil ibn Hadi al-Wadi'i",
+    "nameArabic": "الشيخ مقبل بن هادي الوادعي",
+    "bio": "Savant yéménite, fondateur de Dar al-Hadith à Dammaj, reconnu pour son expertise en sciences du hadith.",
+    "birthYear": 1933,
+    "deathYear": 2001,
+    "country": "Yémen",
+    "warnedBy": [
+      {
+        "scholarId": "rabee-al-madkhali",
+        "summary": "A eu des divergences méthodologiques avec lui sur certains points.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Échanges entre Cheikh Rabi' et Cheikh Muqbil",
+            "description": "Correspondances et remarques mutuelles."
+          }
+        ]
+      }
+    ],
+    "hasWarned": [
+      {
+        "scholarId": "rabee-al-madkhali",
+        "summary": "A émis des remarques sur certaines de ses positions dans le domaine du Jarh wa Ta'dil.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles de Cheikh Muqbil sur Cheikh Rabi'",
+            "description": "Remarques de Cheikh Muqbil concernant certaines positions."
+          }
+        ]
+      },
+      {
+        "scholarId": "abul-hasan-al-maribi",
+        "summary": "A mis en garde contre certaines de ses positions.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles de Cheikh Muqbil sur Abul-Hasan",
+            "description": "Remarques concernant la méthodologie."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "abul-hasan-al-maribi",
+    "name": "Cheikh Abul-Hasan al-Ma'ribi",
+    "nameArabic": "الشيخ أبو الحسن المأربي",
+    "bio": "Savant yéménite, ancien élève de Cheikh Muqbil, connu pour ses cours et conférences.",
+    "birthYear": 1963,
+    "country": "Yémen",
+    "warnedBy": [
+      {
+        "scholarId": "rabee-al-madkhali",
+        "summary": "A mis en garde contre lui en raison de ses positions jugées contraires à la méthodologie salafie.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Réfutation de Cheikh Rabi' contre Abul-Hasan",
+            "description": "Ouvrage détaillant les erreurs relevées."
+          }
+        ]
+      },
+      {
+        "scholarId": "muqbil-al-wadii",
+        "summary": "A mis en garde contre certaines de ses positions.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles de Cheikh Muqbil sur Abul-Hasan",
+            "description": "Remarques concernant la méthodologie."
+          }
+        ]
+      }
+    ],
+    "hasWarned": [
+      {
+        "scholarId": "ali-al-halabi",
+        "summary": "A émis des remarques sur certaines de ses positions.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles d'Abul-Hasan sur Ali al-Halabi",
+            "description": "Remarques méthodologiques."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ali-al-halabi",
+    "name": "Cheikh Ali ibn Hasan al-Halabi",
+    "nameArabic": "الشيخ علي بن حسن الحلبي",
+    "bio": "Savant jordanien, ancien élève de Cheikh al-Albani, auteur de nombreux ouvrages.",
+    "birthYear": 1960,
+    "deathYear": 2020,
+    "country": "Jordanie",
+    "warnedBy": [
+      {
+        "scholarId": "rabee-al-madkhali",
+        "summary": "A mis en garde contre lui sur des questions de méthodologie.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles de Cheikh Rabi' sur Ali al-Halabi",
+            "description": "Mise en garde méthodologique."
+          }
+        ]
+      },
+      {
+        "scholarId": "abul-hasan-al-maribi",
+        "summary": "A émis des remarques sur certaines de ses positions.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles d'Abul-Hasan sur Ali al-Halabi",
+            "description": "Remarques méthodologiques."
+          }
+        ]
+      }
+    ],
+    "hasWarned": [
+      {
+        "scholarId": "muhammad-al-imam",
+        "summary": "A émis des remarques sur sa méthodologie.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles d'Ali al-Halabi sur Muhammad al-Imam",
+            "description": "Remarques sur la méthodologie."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "muhammad-al-imam",
+    "name": "Cheikh Muhammad ibn Abd al-Wahhab al-Imam",
+    "nameArabic": "الشيخ محمد بن عبد الوهاب الإمام",
+    "bio": "Savant yéménite, ancien élève de Cheikh Muqbil, auteur et enseignant.",
+    "birthYear": 1961,
+    "country": "Yémen",
+    "warnedBy": [
+      {
+        "scholarId": "rabee-al-madkhali",
+        "summary": "A émis des remarques sur certaines de ses positions.",
+        "sources": [
+          {
+            "type": "audio",
+            "title": "Audio de Cheikh Rabi' sur Cheikh Muhammad al-Imam",
+            "description": "Enregistrement audio contenant des remarques."
+          }
+        ]
+      },
+      {
+        "scholarId": "ali-al-halabi",
+        "summary": "A émis des remarques sur sa méthodologie.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles d'Ali al-Halabi sur Muhammad al-Imam",
+            "description": "Remarques sur la méthodologie."
+          }
+        ]
+      }
+    ],
+    "hasWarned": [
+      {
+        "scholarId": "yahya-al-hajuri",
+        "summary": "A mis en garde contre certaines de ses positions extrêmes.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles de Cheikh Muhammad al-Imam sur al-Hajuri",
+            "description": "Mise en garde contre les excès."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "yahya-al-hajuri",
+    "name": "Cheikh Yahya ibn Ali al-Hajuri",
+    "nameArabic": "الشيخ يحيى بن علي الحجوري",
+    "bio": "Savant yéménite, successeur de Cheikh Muqbil à la tête de Dar al-Hadith à Dammaj.",
+    "birthYear": 1963,
+    "country": "Yémen",
+    "warnedBy": [
+      {
+        "scholarId": "muhammad-al-imam",
+        "summary": "A mis en garde contre certaines de ses positions extrêmes.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles de Cheikh Muhammad al-Imam sur al-Hajuri",
+            "description": "Mise en garde contre les excès."
+          }
+        ]
+      },
+      {
+        "scholarId": "rabee-al-madkhali",
+        "summary": "A mis en garde contre ses excès dans le Jarh.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles de Cheikh Rabi' sur al-Hajuri",
+            "description": "Mise en garde contre les positions extrêmes."
+          },
+          {
+            "type": "audio",
+            "title": "Audio de Cheikh Rabi' sur al-Hajuri",
+            "description": "Enregistrement contenant la mise en garde."
+          }
+        ]
+      }
+    ],
+    "hasWarned": [
+      {
+        "scholarId": "rabee-al-madkhali",
+        "summary": "A émis des remarques sur Cheikh Rabi'.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles d'al-Hajuri sur Cheikh Rabi'",
+            "description": "Remarques et critiques."
+          }
+        ]
+      },
+      {
+        "scholarId": "muhammad-al-imam",
+        "summary": "A mis en garde contre lui.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles d'al-Hajuri sur Muhammad al-Imam",
+            "description": "Mise en garde."
+          }
+        ]
+      },
+      {
+        "scholarId": "ubayd-al-jabiri",
+        "summary": "A émis des remarques sur certaines de ses positions.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles d'al-Hajuri sur Cheikh Ubayd",
+            "description": "Remarques méthodologiques."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ubayd-al-jabiri",
+    "name": "Cheikh Ubayd ibn Abdillah al-Jabiri",
+    "nameArabic": "الشيخ عبيد بن عبد الله الجابري",
+    "bio": "Savant saoudien, ancien enseignant à l'Université islamique de Médine, connu pour ses cours et fatwas.",
+    "birthYear": 1938,
+    "deathYear": 2024,
+    "country": "Arabie Saoudite",
+    "warnedBy": [
+      {
+        "scholarId": "yahya-al-hajuri",
+        "summary": "A émis des remarques sur certaines de ses positions.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles d'al-Hajuri sur Cheikh Ubayd",
+            "description": "Remarques méthodologiques."
+          }
+        ]
+      }
+    ],
+    "hasWarned": [
+      {
+        "scholarId": "ali-al-halabi",
+        "summary": "A mis en garde contre certaines de ses positions.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles de Cheikh Ubayd sur Ali al-Halabi",
+            "description": "Mise en garde méthodologique."
+          }
+        ]
+      },
+      {
+        "scholarId": "abul-hasan-al-maribi",
+        "summary": "A mis en garde contre certaines de ses erreurs.",
+        "sources": [
+          {
+            "type": "texte",
+            "title": "Paroles de Cheikh Ubayd sur Abul-Hasan",
+            "description": "Mise en garde sur les erreurs relevées."
+          }
+        ]
+      }
+    ]
+  }
+]
