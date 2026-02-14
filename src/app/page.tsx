@@ -1,9 +1,22 @@
 import SearchBar from "@/components/SearchBar";
+import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="mx-auto max-w-3xl px-6 py-16">
-      <div className="text-center">
+    <div className="relative mx-auto max-w-3xl px-6 py-16">
+      {/* Image de fond — planète */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
+        <Image
+          src="/mars-bg.jpg"
+          alt=""
+          width={800}
+          height={800}
+          className="h-[600px] w-[600px] object-contain opacity-[0.07] dark:opacity-[0.12]"
+          priority
+        />
+      </div>
+
+      <div className="relative text-center">
         <h1 className="text-4xl font-bold text-foreground">
           Athar <span className="font-light text-accent">IA</span>
         </h1>
@@ -19,7 +32,7 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="mt-12">
+      <div className="relative mt-12">
         <SearchBar />
       </div>
     </div>
