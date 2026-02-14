@@ -1,8 +1,8 @@
 import type { Scholar, SearchableScholar, Source } from "./types";
 
 const SHEET_ID = "16cM8b0aMSnxxbDx1C3ZRS-k2Z9jvfZE9FOQZ2jAIgR0";
-// Lire uniquement l'onglet "Validées" (gid=0 = premier onglet)
-const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=0`;
+// Lire uniquement l'onglet "Savant qui met en garde"
+const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=985214318`;
 
 // Générer un ID slug à partir d'un nom
 function toSlug(name: string): string {
