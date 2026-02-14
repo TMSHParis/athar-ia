@@ -44,7 +44,7 @@ export default function SearchBar() {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Rechercher un savant..."
+          placeholder="Rechercher un savant ou un étudiant..."
           className="w-full rounded-xl border border-border bg-surface px-5 py-4 text-lg text-foreground shadow-sm outline-none transition-all placeholder:text-muted focus:border-primary-light focus:ring-2 focus:ring-primary-light/20"
           autoFocus
         />
@@ -65,7 +65,7 @@ export default function SearchBar() {
         ) : showAllScholars ? (
           <>
             <p className="text-sm text-muted">
-              {scholars.length} savants enregistrés
+              {scholars.length} savants et étudiants enregistrés
             </p>
             {scholars.map((scholar) => (
               <ScholarCard key={scholar.id} scholar={scholar} />
@@ -82,7 +82,7 @@ export default function SearchBar() {
           </>
         ) : (
           <p className="text-center text-sm text-muted">
-            Aucun savant trouvé pour « {query} »
+            Aucun savant ou étudiant trouvé pour « {query} »
           </p>
         )}
       </div>

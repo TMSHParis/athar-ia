@@ -231,10 +231,10 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Savant qui met en garde */}
+      {/* Savant/étudiant qui met en garde ou critique */}
       <div>
         <label className={labelClasses}>
-          Savant qui met en garde <span className="text-red-500">*</span>
+          Savant/étudiant qui met en garde ou critique <span className="text-red-500">*</span>
         </label>
         <select
           name="scholarFrom"
@@ -243,13 +243,13 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
           required
           className={`${inputClasses} mt-1.5`}
         >
-          <option value="">— Sélectionner un savant —</option>
+          <option value="">— Sélectionner un savant ou un étudiant —</option>
           {existingScholars.map((name) => (
             <option key={name} value={name}>
               {name}
             </option>
           ))}
-          <option value="__new__">+ Ajouter un nouveau savant</option>
+          <option value="__new__">+ Ajouter un nouveau savant ou étudiant</option>
         </select>
         {formData.scholarFrom === "__new__" && (
           <input
@@ -257,17 +257,17 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
             name="scholarFromNew"
             value={formData.scholarFromNew}
             onChange={handleChange}
-            placeholder="Nom complet du savant"
+            placeholder="Nom complet du savant ou étudiant"
             required
             className={`${inputClasses} mt-2`}
           />
         )}
       </div>
 
-      {/* Savant mis en garde */}
+      {/* Savant/étudiant mis en garde ou critiqué */}
       <div>
         <label className={labelClasses}>
-          Savant mis en garde <span className="text-red-500">*</span>
+          Savant/étudiant mis en garde ou critiqué <span className="text-red-500">*</span>
         </label>
         <select
           name="scholarTo"
@@ -276,13 +276,13 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
           required
           className={`${inputClasses} mt-1.5`}
         >
-          <option value="">— Sélectionner un savant —</option>
+          <option value="">— Sélectionner un savant ou un étudiant —</option>
           {existingScholars.map((name) => (
             <option key={name} value={name}>
               {name}
             </option>
           ))}
-          <option value="__new__">+ Ajouter un nouveau savant</option>
+          <option value="__new__">+ Ajouter un nouveau savant ou étudiant</option>
         </select>
         {formData.scholarTo === "__new__" && (
           <input
@@ -290,7 +290,7 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
             name="scholarToNew"
             value={formData.scholarToNew}
             onChange={handleChange}
-            placeholder="Nom complet du savant"
+            placeholder="Nom complet du savant ou étudiant"
             required
             className={`${inputClasses} mt-2`}
           />
@@ -300,13 +300,13 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
       {/* Résumé */}
       <div>
         <label className={labelClasses}>
-          Résumé de la mise en garde <span className="text-red-500">*</span>
+          Résumé de la mise en garde ou critique <span className="text-red-500">*</span>
         </label>
         <textarea
           name="summary"
           value={formData.summary}
           onChange={handleChange}
-          placeholder="Décrivez brièvement la nature de la mise en garde..."
+          placeholder="Décrivez brièvement la nature de la mise en garde ou critique..."
           required
           rows={3}
           className={`${inputClasses} mt-1.5`}

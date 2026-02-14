@@ -24,11 +24,11 @@ export default function Home() {
           أثر
         </p>
         <p className="mt-4 text-lg text-muted">
-          La chaîne des mises en garde entre savants.
+          La chaîne des mises en garde et critiques entre savants et étudiants.
         </p>
         <p className="mx-auto mt-2 max-w-xl text-sm text-muted">
-          Si tu n&apos;écoutes plus un savant parce qu&apos;un autre l&apos;a
-          mis en garde, sache que ce même savant a aussi été mis en garde.
+          Si tu n&apos;écoutes plus un savant ou un étudiant parce qu&apos;un autre l&apos;a
+          mis en garde ou critiqué, sache que ce même savant ou étudiant a aussi été mis en garde ou critiqué.
         </p>
       </div>
 
