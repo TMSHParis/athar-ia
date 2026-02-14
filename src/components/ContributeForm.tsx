@@ -17,6 +17,24 @@ const FILE_ACCEPT: Record<string, string> = {
 
 type FormStatus = "idle" | "sending" | "success" | "error";
 
+interface SourceEntry {
+  sourceType: string;
+  sourceTitle: string;
+  sourceUrl: string;
+  sourceDescription: string;
+  file: File | null;
+}
+
+function createEmptySource(): SourceEntry {
+  return {
+    sourceType: "texte",
+    sourceTitle: "",
+    sourceUrl: "",
+    sourceDescription: "",
+    file: null,
+  };
+}
+
 interface ContributeFormProps {
   existingScholars: string[];
 }
@@ -24,18 +42,14 @@ interface ContributeFormProps {
 export default function ContributeForm({ existingScholars }: ContributeFormProps) {
   const [status, setStatus] = useState<FormStatus>("idle");
   const [uploadProgress, setUploadProgress] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRefs = useRef<Map<number, HTMLInputElement>>(new Map());
+  const [sources, setSources] = useState<SourceEntry[]>([createEmptySource()]);
   const [formData, setFormData] = useState({
     scholarFrom: "",
     scholarFromNew: "",
     scholarTo: "",
     scholarToNew: "",
     summary: "",
-    sourceType: "texte",
-    sourceTitle: "",
-    sourceUrl: "",
-    sourceDescription: "",
     submitterName: "",
     submitterContact: "",
   });
@@ -47,25 +61,51 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-
-    // Réinitialiser le fichier quand on change de type de source
-    if (name === "sourceType") {
-      setFile(null);
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSourceChange = (
+    index: number,
+    field: keyof SourceEntry,
+    value: string
+  ) => {
+    setSources((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      // Réinitialiser le fichier quand on change de type de source
+      if (field === "sourceType") {
+        updated[index].file = null;
+        const ref = fileInputRefs.current.get(index);
+        if (ref) ref.value = "";
+      }
+      return updated;
+    });
+  };
+
+  const handleFileChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     if (!selected) return;
 
-    // Limite de 50 MB
     if (selected.size > 50 * 1024 * 1024) {
       alert("Le fichier est trop volumineux (max 50 MB).");
       e.target.value = "";
       return;
     }
-    setFile(selected);
+
+    setSources((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], file: selected };
+      return updated;
+    });
+  };
+
+  const addSource = () => {
+    setSources((prev) => [...prev, createEmptySource()]);
+  };
+
+  const removeSource = (index: number) => {
+    if (sources.length <= 1) return;
+    setSources((prev) => prev.filter((_, i) => i !== index));
+    fileInputRefs.current.delete(index);
   };
 
   const fileToBase64 = (f: File): Promise<string> => {
@@ -73,7 +113,6 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
       const reader = new FileReader();
       reader.onload = () => {
         const result = reader.result as string;
-        // Enlever le préfixe "data:...;base64,"
         resolve(result.split(",")[1]);
       };
       reader.onerror = reject;
@@ -95,61 +134,62 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
         : formData.scholarTo;
 
     try {
-      let fileData: string | undefined;
-      let fileName: string | undefined;
-      let fileMimeType: string | undefined;
-
-      if (file) {
-        setUploadProgress("Préparation du fichier...");
-        fileData = await fileToBase64(file);
-        fileName = file.name;
-        fileMimeType = file.type;
-        setUploadProgress("Envoi en cours...");
-      }
-
-      const payload = {
-        scholarFrom,
-        scholarTo,
-        summary: formData.summary,
-        sourceType: formData.sourceType,
-        sourceTitle: formData.sourceTitle,
-        sourceUrl: formData.sourceUrl,
-        sourceDescription: formData.sourceDescription,
-        submitterName: formData.submitterName,
-        submitterContact: formData.submitterContact,
-        date: new Date().toISOString(),
-        // Fichier en base64 (si présent)
-        fileData,
-        fileName,
-        fileMimeType,
-      };
-
       const SCRIPT_URL =
         "https://script.google.com/macros/s/AKfycbyM87BifKYnGUpH-u5Vpjv_756tVm8N45EAJBMUPtvvrMnqe8WQvPoVupwqvOJ2QQL-Gw/exec";
 
-      const response = await fetch(SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      // Envoyer chaque source comme une ligne séparée
+      for (let i = 0; i < sources.length; i++) {
+        const source = sources[i];
+        setUploadProgress(`Envoi de la source ${i + 1}/${sources.length}...`);
 
-      if (response.type === "opaque" || response.ok) {
-        setStatus("success");
-      } else {
-        setStatus("error");
+        let fileData: string | undefined;
+        let fileName: string | undefined;
+        let fileMimeType: string | undefined;
+
+        if (source.file) {
+          setUploadProgress(`Préparation du fichier ${i + 1}/${sources.length}...`);
+          fileData = await fileToBase64(source.file);
+          fileName = source.file.name;
+          fileMimeType = source.file.type;
+          setUploadProgress(`Envoi du fichier ${i + 1}/${sources.length}...`);
+        }
+
+        const payload = {
+          scholarFrom,
+          scholarTo,
+          summary: formData.summary,
+          sourceType: source.sourceType,
+          sourceTitle: source.sourceTitle,
+          sourceUrl: source.sourceUrl,
+          sourceDescription: source.sourceDescription,
+          submitterName: formData.submitterName,
+          submitterContact: formData.submitterContact,
+          date: new Date().toISOString(),
+          fileData,
+          fileName,
+          fileMimeType,
+        };
+
+        const response = await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (response.type !== "opaque" && !response.ok) {
+          setStatus("error");
+          return;
+        }
       }
+
+      setStatus("success");
     } catch {
       setStatus("error");
     } finally {
       setUploadProgress("");
     }
   };
-
-  const showFileUpload =
-    formData.sourceType === "audio" ||
-    formData.sourceType === "video" ||
-    formData.sourceType === "pdf";
 
   if (status === "success") {
     return (
@@ -165,18 +205,14 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
         <button
           onClick={() => {
             setStatus("idle");
-            setFile(null);
-            if (fileInputRef.current) fileInputRef.current.value = "";
+            setSources([createEmptySource()]);
+            fileInputRefs.current.clear();
             setFormData({
               scholarFrom: "",
               scholarFromNew: "",
               scholarTo: "",
               scholarToNew: "",
               summary: "",
-              sourceType: "texte",
-              sourceTitle: "",
-              sourceUrl: "",
-              sourceDescription: "",
               submitterName: "",
               submitterContact: "",
             });
@@ -277,101 +313,140 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
         />
       </div>
 
-      {/* Source */}
-      <fieldset className="rounded-lg border border-border p-5">
-        <legend className="px-2 text-sm font-semibold text-foreground">
-          Source / Preuve
-        </legend>
+      {/* Sources multiples */}
+      {sources.map((source, index) => {
+        const showFileUpload =
+          source.sourceType === "audio" ||
+          source.sourceType === "video" ||
+          source.sourceType === "pdf";
 
-        <div className="space-y-4">
-          <div>
-            <label className={labelClasses}>
-              Type de source <span className="text-red-500">*</span>
-            </label>
-            <select
-              name="sourceType"
-              value={formData.sourceType}
-              onChange={handleChange}
-              required
-              className={`${inputClasses} mt-1.5`}
-            >
-              {SOURCE_TYPES.map((type) => (
-                <option key={type.value} value={type.value}>
-                  {type.label}
-                </option>
-              ))}
-            </select>
-          </div>
+        return (
+          <fieldset
+            key={index}
+            className="relative rounded-lg border border-border p-5"
+          >
+            <legend className="px-2 text-sm font-semibold text-foreground">
+              Source {sources.length > 1 ? `${index + 1}` : ""} / Preuve
+            </legend>
 
-          <div>
-            <label className={labelClasses}>
-              Titre de la source <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              name="sourceTitle"
-              value={formData.sourceTitle}
-              onChange={handleChange}
-              placeholder="Ex: Réfutation dans Majmu al-Fatawa"
-              required
-              className={`${inputClasses} mt-1.5`}
-            />
-          </div>
+            {sources.length > 1 && (
+              <button
+                type="button"
+                onClick={() => removeSource(index)}
+                className="absolute right-3 top-3 rounded-md px-2 py-1 text-xs text-red-500 transition-colors hover:bg-red-500/10"
+              >
+                Supprimer
+              </button>
+            )}
 
-          {/* Upload de fichier (audio, vidéo, pdf) */}
-          {showFileUpload && (
-            <div>
-              <label className={labelClasses}>
-                Importer un fichier
-              </label>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept={FILE_ACCEPT[formData.sourceType] || "*/*"}
-                onChange={handleFileChange}
-                className="mt-1.5 w-full text-sm text-foreground file:mr-4 file:rounded-lg file:border file:border-border file:bg-surface file:px-4 file:py-2 file:text-sm file:font-medium file:text-foreground file:transition-colors hover:file:bg-primary/10"
-              />
-              {file && (
-                <p className="mt-1.5 text-xs text-muted">
-                  📎 {file.name} ({(file.size / 1024 / 1024).toFixed(1)} MB)
-                </p>
+            <div className="space-y-4">
+              <div>
+                <label className={labelClasses}>
+                  Type de source <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={source.sourceType}
+                  onChange={(e) =>
+                    handleSourceChange(index, "sourceType", e.target.value)
+                  }
+                  required
+                  className={`${inputClasses} mt-1.5`}
+                >
+                  {SOURCE_TYPES.map((type) => (
+                    <option key={type.value} value={type.value}>
+                      {type.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className={labelClasses}>
+                  Titre de la source <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={source.sourceTitle}
+                  onChange={(e) =>
+                    handleSourceChange(index, "sourceTitle", e.target.value)
+                  }
+                  placeholder="Ex: Réfutation dans Majmu al-Fatawa"
+                  required
+                  className={`${inputClasses} mt-1.5`}
+                />
+              </div>
+
+              {showFileUpload && (
+                <div>
+                  <label className={labelClasses}>Importer un fichier</label>
+                  <input
+                    ref={(el) => {
+                      if (el) fileInputRefs.current.set(index, el);
+                    }}
+                    type="file"
+                    accept={FILE_ACCEPT[source.sourceType] || "*/*"}
+                    onChange={(e) => handleFileChange(index, e)}
+                    className="mt-1.5 w-full text-sm text-foreground file:mr-4 file:rounded-lg file:border file:border-border file:bg-surface file:px-4 file:py-2 file:text-sm file:font-medium file:text-foreground file:transition-colors hover:file:bg-primary/10"
+                  />
+                  {source.file && (
+                    <p className="mt-1.5 text-xs text-muted">
+                      📎 {source.file.name} (
+                      {(source.file.size / 1024 / 1024).toFixed(1)} MB)
+                    </p>
+                  )}
+                  <p className="mt-1 text-xs text-muted">
+                    Max 50 MB. Le fichier sera hébergé sur Google Drive.
+                  </p>
+                </div>
               )}
-              <p className="mt-1 text-xs text-muted">
-                Max 50 MB. Le fichier sera hébergé sur Google Drive.
-              </p>
+
+              <div>
+                <label className={labelClasses}>
+                  {showFileUpload ? "Ou coller un lien (URL)" : "Lien (URL)"}
+                </label>
+                <input
+                  type="url"
+                  value={source.sourceUrl}
+                  onChange={(e) =>
+                    handleSourceChange(index, "sourceUrl", e.target.value)
+                  }
+                  placeholder="https://..."
+                  className={`${inputClasses} mt-1.5`}
+                />
+                <p className="mt-1 text-xs text-muted">
+                  Lien YouTube, lien vers un PDF, page web, etc. (optionnel)
+                </p>
+              </div>
+
+              <div>
+                <label className={labelClasses}>Description de la source</label>
+                <textarea
+                  value={source.sourceDescription}
+                  onChange={(e) =>
+                    handleSourceChange(
+                      index,
+                      "sourceDescription",
+                      e.target.value
+                    )
+                  }
+                  placeholder="Contexte supplémentaire sur cette source..."
+                  rows={2}
+                  className={`${inputClasses} mt-1.5`}
+                />
+              </div>
             </div>
-          )}
+          </fieldset>
+        );
+      })}
 
-          <div>
-            <label className={labelClasses}>
-              {showFileUpload ? "Ou coller un lien (URL)" : "Lien (URL)"}
-            </label>
-            <input
-              type="url"
-              name="sourceUrl"
-              value={formData.sourceUrl}
-              onChange={handleChange}
-              placeholder="https://..."
-              className={`${inputClasses} mt-1.5`}
-            />
-            <p className="mt-1 text-xs text-muted">
-              Lien YouTube, lien vers un PDF, page web, etc. (optionnel)
-            </p>
-          </div>
-
-          <div>
-            <label className={labelClasses}>Description de la source</label>
-            <textarea
-              name="sourceDescription"
-              value={formData.sourceDescription}
-              onChange={handleChange}
-              placeholder="Contexte supplémentaire sur cette source..."
-              rows={2}
-              className={`${inputClasses} mt-1.5`}
-            />
-          </div>
-        </div>
-      </fieldset>
+      {/* Bouton ajouter une source */}
+      <button
+        type="button"
+        onClick={addSource}
+        className="w-full rounded-lg border border-dashed border-border py-3 text-sm font-medium text-muted transition-colors hover:border-primary-light hover:text-primary-light"
+      >
+        + Ajouter une autre source
+      </button>
 
       {/* Informations du contributeur */}
       <fieldset className="rounded-lg border border-border p-5">
