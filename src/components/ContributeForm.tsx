@@ -72,14 +72,8 @@ export default function ContributeForm() {
     };
 
     try {
-      const SCRIPT_URL = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL;
-
-      if (!SCRIPT_URL) {
-        // Fallback : copier dans le presse-papier
-        await navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
-        setStatus("success");
-        return;
-      }
+      const SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbyM87BifKYnGUpH-u5Vpjv_756tVm8N45EAJBMUPtvvrMnqe8WQvPoVupwqvOJ2QQL-Gw/exec";
 
       const response = await fetch(SCRIPT_URL, {
         method: "POST",
