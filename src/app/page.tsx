@@ -7,11 +7,11 @@ export default function Home() {
       {/* Image de fond — planète */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
         <Image
-          src="/mars-bg.jpg"
+          src="/mars-bg.png"
           alt=""
-          width={800}
-          height={800}
-          className="h-[600px] w-[600px] object-contain opacity-[0.07] dark:opacity-[0.12]"
+          width={1024}
+          height={1024}
+          className="h-[600px] w-[600px] object-contain opacity-[0.07] dark:opacity-[0.15]"
           priority
         />
       </div>
