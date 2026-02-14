@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const SOURCE_TYPES = [
   { value: "texte", label: "Texte / Écrit" },
@@ -8,6 +8,12 @@ const SOURCE_TYPES = [
   { value: "video", label: "Vidéo" },
   { value: "pdf", label: "PDF / Document" },
 ];
+
+const FILE_ACCEPT: Record<string, string> = {
+  audio: "audio/*",
+  video: "video/*",
+  pdf: ".pdf",
+};
 
 type FormStatus = "idle" | "sending" | "success" | "error";
 
@@ -17,6 +23,9 @@ interface ContributeFormProps {
 
 export default function ContributeForm({ existingScholars }: ContributeFormProps) {
   const [status, setStatus] = useState<FormStatus>("idle");
+  const [uploadProgress, setUploadProgress] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     scholarFrom: "",
     scholarFromNew: "",
@@ -36,7 +45,40 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Réinitialiser le fichier quand on change de type de source
+    if (name === "sourceType") {
+      setFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0];
+    if (!selected) return;
+
+    // Limite de 50 MB
+    if (selected.size > 50 * 1024 * 1024) {
+      alert("Le fichier est trop volumineux (max 50 MB).");
+      e.target.value = "";
+      return;
+    }
+    setFile(selected);
+  };
+
+  const fileToBase64 = (f: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        // Enlever le préfixe "data:...;base64,"
+        resolve(result.split(",")[1]);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(f);
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -52,20 +94,36 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
         ? formData.scholarToNew
         : formData.scholarTo;
 
-    const payload = {
-      scholarFrom,
-      scholarTo,
-      summary: formData.summary,
-      sourceType: formData.sourceType,
-      sourceTitle: formData.sourceTitle,
-      sourceUrl: formData.sourceUrl,
-      sourceDescription: formData.sourceDescription,
-      submitterName: formData.submitterName,
-      submitterContact: formData.submitterContact,
-      date: new Date().toISOString(),
-    };
-
     try {
+      let fileData: string | undefined;
+      let fileName: string | undefined;
+      let fileMimeType: string | undefined;
+
+      if (file) {
+        setUploadProgress("Préparation du fichier...");
+        fileData = await fileToBase64(file);
+        fileName = file.name;
+        fileMimeType = file.type;
+        setUploadProgress("Envoi en cours...");
+      }
+
+      const payload = {
+        scholarFrom,
+        scholarTo,
+        summary: formData.summary,
+        sourceType: formData.sourceType,
+        sourceTitle: formData.sourceTitle,
+        sourceUrl: formData.sourceUrl,
+        sourceDescription: formData.sourceDescription,
+        submitterName: formData.submitterName,
+        submitterContact: formData.submitterContact,
+        date: new Date().toISOString(),
+        // Fichier en base64 (si présent)
+        fileData,
+        fileName,
+        fileMimeType,
+      };
+
       const SCRIPT_URL =
         "https://script.google.com/macros/s/AKfycbyM87BifKYnGUpH-u5Vpjv_756tVm8N45EAJBMUPtvvrMnqe8WQvPoVupwqvOJ2QQL-Gw/exec";
 
@@ -76,7 +134,6 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
         body: JSON.stringify(payload),
       });
 
-      // no-cors always returns opaque response, so we assume success
       if (response.type === "opaque" || response.ok) {
         setStatus("success");
       } else {
@@ -84,8 +141,15 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
       }
     } catch {
       setStatus("error");
+    } finally {
+      setUploadProgress("");
     }
   };
+
+  const showFileUpload =
+    formData.sourceType === "audio" ||
+    formData.sourceType === "video" ||
+    formData.sourceType === "pdf";
 
   if (status === "success") {
     return (
@@ -95,12 +159,14 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
           Merci pour votre contribution !
         </h3>
         <p className="mt-2 text-sm text-muted">
-          Votre soumission a été envoyée. Elle sera vérifiée puis ajoutée au
-          site.
+          Votre soumission a été envoyée. Elle sera visible sur le site
+          dans quelques instants.
         </p>
         <button
           onClick={() => {
             setStatus("idle");
+            setFile(null);
+            if (fileInputRef.current) fileInputRef.current.value = "";
             setFormData({
               scholarFrom: "",
               scholarFromNew: "",
@@ -252,8 +318,34 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
             />
           </div>
 
+          {/* Upload de fichier (audio, vidéo, pdf) */}
+          {showFileUpload && (
+            <div>
+              <label className={labelClasses}>
+                Importer un fichier
+              </label>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept={FILE_ACCEPT[formData.sourceType] || "*/*"}
+                onChange={handleFileChange}
+                className="mt-1.5 w-full text-sm text-foreground file:mr-4 file:rounded-lg file:border file:border-border file:bg-surface file:px-4 file:py-2 file:text-sm file:font-medium file:text-foreground file:transition-colors hover:file:bg-primary/10"
+              />
+              {file && (
+                <p className="mt-1.5 text-xs text-muted">
+                  📎 {file.name} ({(file.size / 1024 / 1024).toFixed(1)} MB)
+                </p>
+              )}
+              <p className="mt-1 text-xs text-muted">
+                Max 50 MB. Le fichier sera hébergé sur Google Drive.
+              </p>
+            </div>
+          )}
+
           <div>
-            <label className={labelClasses}>Lien (URL)</label>
+            <label className={labelClasses}>
+              {showFileUpload ? "Ou coller un lien (URL)" : "Lien (URL)"}
+            </label>
             <input
               type="url"
               name="sourceUrl"
@@ -322,7 +414,9 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
         disabled={status === "sending"}
         className="w-full rounded-lg bg-primary px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-light disabled:opacity-50"
       >
-        {status === "sending" ? "Envoi en cours..." : "Envoyer la contribution"}
+        {status === "sending"
+          ? uploadProgress || "Envoi en cours..."
+          : "Envoyer la contribution"}
       </button>
 
       {status === "error" && (

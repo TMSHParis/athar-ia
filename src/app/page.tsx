@@ -9,7 +9,7 @@ export default async function Home() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-primary">
+        <h1 className="text-4xl font-bold text-foreground">
           Athar <span className="font-light text-accent">IA</span>
         </h1>
         <p className="mt-2 font-arabic text-2xl text-muted" dir="rtl">
