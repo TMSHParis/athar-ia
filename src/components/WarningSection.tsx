@@ -4,12 +4,14 @@ import WarningItem from "./WarningItem";
 interface WarningSectionProps {
   title: string;
   warnings: Warning[];
+  scholarNames: Record<string, string>;
   icon: string;
 }
 
 export default function WarningSection({
   title,
   warnings,
+  scholarNames,
   icon,
 }: WarningSectionProps) {
   return (
@@ -24,7 +26,11 @@ export default function WarningSection({
       {warnings.length > 0 ? (
         <div className="mt-4">
           {warnings.map((warning, index) => (
-            <WarningItem key={index} warning={warning} />
+            <WarningItem
+              key={index}
+              warning={warning}
+              scholarName={scholarNames[warning.scholarId] ?? warning.scholarId}
+            />
           ))}
         </div>
       ) : (

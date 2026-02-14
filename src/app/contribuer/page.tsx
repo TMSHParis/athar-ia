@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import ContributeForm from "@/components/ContributeForm";
+import { getAllScholars } from "@/lib/data";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Contribuer",
@@ -7,7 +10,10 @@ export const metadata: Metadata = {
     "Ajoutez un savant ou une mise en garde avec ses sources pour enrichir Athar IA.",
 };
 
-export default function ContribuerPage() {
+export default async function ContribuerPage() {
+  const scholars = await getAllScholars();
+  const scholarNames = scholars.map((s) => s.name);
+
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
       <h1 className="text-3xl font-bold text-foreground">Contribuer</h1>
@@ -18,7 +24,7 @@ export default function ContribuerPage() {
       </p>
 
       <div className="mt-8">
-        <ContributeForm />
+        <ContributeForm existingScholars={scholarNames} />
       </div>
     </div>
   );

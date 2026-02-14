@@ -2,16 +2,6 @@
 
 import { useState } from "react";
 
-const EXISTING_SCHOLARS = [
-  "Cheikh Rabi' al-Madkhali",
-  "Cheikh Muqbil ibn Hadi al-Wadi'i",
-  "Cheikh Abul-Hasan al-Ma'ribi",
-  "Cheikh Ali ibn Hasan al-Halabi",
-  "Cheikh Muhammad ibn Abd al-Wahhab al-Imam",
-  "Cheikh Yahya ibn Ali al-Hajuri",
-  "Cheikh Ubayd ibn Abdillah al-Jabiri",
-];
-
 const SOURCE_TYPES = [
   { value: "texte", label: "Texte / Écrit" },
   { value: "audio", label: "Audio" },
@@ -21,7 +11,11 @@ const SOURCE_TYPES = [
 
 type FormStatus = "idle" | "sending" | "success" | "error";
 
-export default function ContributeForm() {
+interface ContributeFormProps {
+  existingScholars: string[];
+}
+
+export default function ContributeForm({ existingScholars }: ContributeFormProps) {
   const [status, setStatus] = useState<FormStatus>("idle");
   const [formData, setFormData] = useState({
     scholarFrom: "",
@@ -148,7 +142,7 @@ export default function ContributeForm() {
           className={`${inputClasses} mt-1.5`}
         >
           <option value="">— Sélectionner un savant —</option>
-          {EXISTING_SCHOLARS.map((name) => (
+          {existingScholars.map((name) => (
             <option key={name} value={name}>
               {name}
             </option>
@@ -181,7 +175,7 @@ export default function ContributeForm() {
           className={`${inputClasses} mt-1.5`}
         >
           <option value="">— Sélectionner un savant —</option>
-          {EXISTING_SCHOLARS.map((name) => (
+          {existingScholars.map((name) => (
             <option key={name} value={name}>
               {name}
             </option>

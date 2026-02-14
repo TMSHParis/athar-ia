@@ -1,8 +1,10 @@
 import SearchBar from "@/components/SearchBar";
 import { getScholarsForSearch } from "@/lib/data";
 
-export default function Home() {
-  const scholars = getScholarsForSearch();
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const scholars = await getScholarsForSearch();
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">

@@ -1,15 +1,13 @@
 import Link from "next/link";
 import type { Warning } from "@/lib/types";
-import { getScholarName } from "@/lib/data";
 import SourceBadge from "./SourceBadge";
 
 interface WarningItemProps {
   warning: Warning;
+  scholarName: string;
 }
 
-export default function WarningItem({ warning }: WarningItemProps) {
-  const scholarName = getScholarName(warning.scholarId);
-
+export default function WarningItem({ warning, scholarName }: WarningItemProps) {
   return (
     <div className="border-b border-border py-4 last:border-b-0">
       <Link

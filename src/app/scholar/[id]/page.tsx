@@ -5,22 +5,17 @@ import WarningSection from "@/components/WarningSection";
 import Link from "next/link";
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   params: Promise<{ id: string }>;
-}
-
-export async function generateStaticParams() {
-  const scholars = getAllScholars();
-  return scholars.map((scholar) => ({
-    id: scholar.id,
-  }));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  const scholar = getScholarById(id);
+  const scholar = await getScholarById(id);
   if (!scholar) return { title: "Savant introuvable" };
 
   return {
@@ -31,10 +26,19 @@ export async function generateMetadata({
 
 export default async function ScholarPage({ params }: PageProps) {
   const { id } = await params;
-  const scholar = getScholarById(id);
+  const [scholar, allScholars] = await Promise.all([
+    getScholarById(id),
+    getAllScholars(),
+  ]);
 
   if (!scholar) {
     notFound();
+  }
+
+  // Créer un map id → nom pour les composants enfants
+  const scholarNames: Record<string, string> = {};
+  for (const s of allScholars) {
+    scholarNames[s.id] = s.name;
   }
 
   const years = formatYears(scholar.birthYear, scholar.deathYear);
@@ -77,11 +81,13 @@ export default async function ScholarPage({ params }: PageProps) {
         <WarningSection
           title="A été mis en garde par"
           warnings={scholar.warnedBy}
+          scholarNames={scholarNames}
           icon="🔴"
         />
         <WarningSection
           title="A mis en garde contre"
           warnings={scholar.hasWarned}
+          scholarNames={scholarNames}
           icon="🔵"
         />
       </div>
