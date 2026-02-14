@@ -1,16 +1,24 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Fuse from "fuse.js";
 import type { SearchableScholar } from "@/lib/types";
 import ScholarCard from "./ScholarCard";
 
-interface SearchBarProps {
-  scholars: SearchableScholar[];
-}
-
-export default function SearchBar({ scholars }: SearchBarProps) {
+export default function SearchBar() {
   const [query, setQuery] = useState("");
+  const [scholars, setScholars] = useState<SearchableScholar[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/scholars")
+      .then((res) => res.json())
+      .then((data: SearchableScholar[]) => {
+        setScholars(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
   const fuse = useMemo(
     () =>
@@ -52,7 +60,9 @@ export default function SearchBar({ scholars }: SearchBarProps) {
       </div>
 
       <div className="mt-6 space-y-3">
-        {showAllScholars ? (
+        {loading ? (
+          <p className="text-center text-sm text-muted">Chargement...</p>
+        ) : showAllScholars ? (
           <>
             <p className="text-sm text-muted">
               {scholars.length} savants enregistrés
