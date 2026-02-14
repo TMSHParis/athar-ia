@@ -16,40 +16,69 @@ function toSlug(name: string): string {
     .trim();
 }
 
-// Parser une ligne CSV (gère les guillemets)
-function parseCSVLine(line: string): string[] {
-  const result: string[] = [];
-  let current = "";
+// Parser le texte CSV complet (gère les guillemets et sauts de ligne dans les cellules)
+function parseCSV(text: string): string[][] {
+  const rows: string[][] = [];
+  let currentRow: string[] = [];
+  let currentField = "";
   let inQuotes = false;
 
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+
     if (char === '"') {
-      if (inQuotes && line[i + 1] === '"') {
-        current += '"';
+      if (inQuotes && text[i + 1] === '"') {
+        // Guillemet échappé ("")
+        currentField += '"';
         i++;
       } else {
+        // Toggle quote state
         inQuotes = !inQuotes;
       }
     } else if (char === "," && !inQuotes) {
-      result.push(current.trim());
-      current = "";
+      // Fin de champ
+      currentRow.push(currentField.trim());
+      currentField = "";
+    } else if ((char === "\n" || char === "\r") && !inQuotes) {
+      // Fin de ligne
+      if (currentField.trim() || currentRow.length > 0) {
+        currentRow.push(currentField.trim());
+        if (currentRow.some((f) => f)) {
+          rows.push(currentRow);
+        }
+        currentRow = [];
+        currentField = "";
+      }
+      // Skip \r\n
+      if (char === "\r" && text[i + 1] === "\n") {
+        i++;
+      }
     } else {
-      current += char;
+      currentField += char;
     }
   }
-  result.push(current.trim());
-  return result;
+
+  // Ajouter le dernier champ et la dernière ligne
+  if (currentField.trim() || currentRow.length > 0) {
+    currentRow.push(currentField.trim());
+    if (currentRow.some((f) => f)) {
+      rows.push(currentRow);
+    }
+  }
+
+  return rows;
 }
 
 // Récupérer les données brutes du Google Sheet
 async function fetchSheetData(): Promise<string[][]> {
   const response = await fetch(SHEET_CSV_URL, { next: { revalidate: 60 } });
   const text = await response.text();
-  const lines = text.split("\n").filter((line) => line.trim());
+
+  // Parser correctement le CSV avec support des sauts de ligne dans les cellules
+  const rows = parseCSV(text);
 
   // Ignorer la première ligne (en-têtes)
-  return lines.slice(1).map(parseCSVLine);
+  return rows.slice(1);
 }
 
 // Construire les savants à partir des lignes du Sheet
