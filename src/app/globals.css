@@ -38,14 +38,14 @@
 }
 
 body {
-  /* Mode clair: blanc vers jaune */
-  background: linear-gradient(135deg, #fafaf9 0%, #f5f2e8 50%, #f0ead0 100%);
+  /* Mode clair: blanc avec touche très légère de jaune */
+  background: linear-gradient(135deg, var(--background) 0%, color-mix(in srgb, var(--accent) 0.5%, var(--background)) 100%);
   background-attachment: fixed;
   color: var(--foreground);
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .dark {
-  /* Mode sombre: noir vers jaune */
-  background: linear-gradient(135deg, #0f0f0f 0%, #1a1714 50%, #1f1810 100%);
+  /* Mode sombre: noir avec touche très légère de jaune */
+  background: linear-gradient(135deg, var(--background) 0%, color-mix(in srgb, var(--accent) 0.3%, var(--background)) 100%);
 }
