@@ -9,6 +9,7 @@ export default function SearchBar() {
   const [query, setQuery] = useState("");
   const [scholars, setScholars] = useState<SearchableScholar[]>([]);
   const [loading, setLoading] = useState(true);
+  const [displayCount, setDisplayCount] = useState(3);
 
   useEffect(() => {
     fetch("/api/scholars")
@@ -36,6 +37,8 @@ export default function SearchBar() {
   }, [fuse, query]);
 
   const showAllScholars = query.length < 2;
+  const displayedScholars = showAllScholars ? scholars.slice(0, displayCount) : results;
+  const hasMore = showAllScholars && displayCount < scholars.length;
 
   return (
     <div className="w-full">
@@ -43,7 +46,10 @@ export default function SearchBar() {
         <input
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setDisplayCount(3); // Reset to 3 when searching
+          }}
           placeholder="Rechercher..."
           title="Rechercher un savant ou un étudiant"
           className="w-full rounded-xl border border-border bg-surface px-5 py-4 text-lg text-foreground shadow-sm outline-none transition-all placeholder:text-muted focus:border-primary-light focus:ring-2 focus:ring-primary-light/20"
@@ -68,16 +74,24 @@ export default function SearchBar() {
             <p className="text-sm text-muted">
               {scholars.length} savants et étudiants enregistrés
             </p>
-            {scholars.map((scholar) => (
+            {displayedScholars.map((scholar) => (
               <ScholarCard key={scholar.id} scholar={scholar} />
             ))}
+            {hasMore && (
+              <button
+                onClick={() => setDisplayCount((prev) => prev + 3)}
+                className="w-full rounded-lg border border-dashed border-border py-3 text-sm font-medium text-muted transition-colors hover:border-primary-light hover:text-primary-light"
+              >
+                Charger plus
+              </button>
+            )}
           </>
         ) : results.length > 0 ? (
           <>
             <p className="text-sm text-muted">
               {results.length} résultat{results.length > 1 ? "s" : ""}
             </p>
-            {results.map((scholar) => (
+            {displayedScholars.map((scholar) => (
               <ScholarCard key={scholar.id} scholar={scholar} />
             ))}
           </>

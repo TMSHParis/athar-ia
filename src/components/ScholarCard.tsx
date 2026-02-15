@@ -22,12 +22,12 @@ export default function ScholarCard({ scholar }: ScholarCardProps) {
         </div>
         <div className="flex shrink-0 gap-2 text-xs">
           {scholar.warnedByCount > 0 && (
-            <span className="rounded-full bg-red-500/10 px-2 py-0.5 text-red-600 dark:text-red-400">
+            <span className="rounded-full bg-foreground/10 px-2 py-0.5 text-foreground dark:bg-accent/20 dark:text-accent">
               {scholar.warnedByCount} reçue{scholar.warnedByCount > 1 ? "s" : ""}
             </span>
           )}
           {scholar.hasWarnedCount > 0 && (
-            <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-blue-600 dark:text-blue-400">
+            <span className="rounded-full bg-accent/20 px-2 py-0.5 text-accent dark:bg-foreground/10 dark:text-foreground">
               {scholar.hasWarnedCount} émise{scholar.hasWarnedCount > 1 ? "s" : ""}
             </span>
           )}
