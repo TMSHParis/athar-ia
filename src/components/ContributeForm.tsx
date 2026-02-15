@@ -217,7 +217,7 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
               submitterContact: "",
             });
           }}
-          className="mt-6 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-light"
+          className="mt-6 rounded-lg bg-accent px-6 py-2.5 text-sm font-medium text-foreground transition-colors hover:opacity-80"
         >
           Soumettre une autre contribution
         </button>
@@ -443,7 +443,7 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
       <button
         type="button"
         onClick={addSource}
-        className="w-full rounded-lg border border-dashed border-border py-3 text-sm font-medium text-muted transition-colors hover:border-primary-light hover:text-primary-light"
+        className="w-full rounded-lg border border-dashed border-accent py-3 text-sm font-medium text-accent transition-colors hover:bg-accent/10"
       >
         + Ajouter une autre source
       </button>
@@ -487,7 +487,7 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
       <button
         type="submit"
         disabled={status === "sending"}
-        className="w-full rounded-lg bg-primary px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-light disabled:opacity-50"
+        className="w-full rounded-lg bg-accent px-6 py-3.5 text-sm font-semibold text-foreground dark:text-foreground transition-colors hover:opacity-80 disabled:opacity-50"
       >
         {status === "sending"
           ? uploadProgress || "Envoi en cours..."
