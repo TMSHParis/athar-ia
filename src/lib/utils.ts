@@ -14,19 +14,19 @@ export function getSourceIcon(type: string): string {
   }
 }
 
-// Couleur CSS selon le type de source (compatible dark mode)
+// Couleur CSS selon le type de source (compatible dark mode, theme-aware)
 export function getSourceColor(type: string): string {
   switch (type) {
     case "texte":
-      return "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20";
+      return "bg-accent/20 text-accent dark:bg-accent/20 dark:text-accent border-accent/30";
     case "audio":
-      return "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20";
+      return "bg-accent/15 text-accent dark:bg-accent/15 dark:text-accent border-accent/25";
     case "video":
-      return "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20";
+      return "bg-foreground/10 text-foreground dark:bg-accent/20 dark:text-accent border-foreground/20 dark:border-accent/30";
     case "pdf":
-      return "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20";
+      return "bg-accent/20 text-accent dark:bg-foreground/10 dark:text-foreground border-accent/30 dark:border-foreground/20";
     default:
-      return "bg-gray-500/10 text-gray-600 dark:text-gray-400 border-gray-500/20";
+      return "bg-accent/10 text-accent dark:bg-accent/10 dark:text-accent border-accent/20";
   }
 }
 
