@@ -44,7 +44,8 @@ export default function SearchBar() {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Rechercher un savant ou un étudiant..."
+          placeholder="Rechercher..."
+          title="Rechercher un savant ou un étudiant"
           className="w-full rounded-xl border border-border bg-surface px-5 py-4 text-lg text-foreground shadow-sm outline-none transition-all placeholder:text-muted focus:border-primary-light focus:ring-2 focus:ring-primary-light/20"
           autoFocus
         />
