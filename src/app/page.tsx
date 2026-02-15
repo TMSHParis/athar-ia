@@ -1,32 +1,32 @@
 import SearchBar from "@/components/SearchBar";
-import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="relative mx-auto max-w-3xl px-6 py-16">
-      {/* Image de fond — planète */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
-        <Image
-          src="/mars-bg.png"
-          alt=""
-          width={1024}
-          height={1024}
-          className="h-[600px] w-[600px] object-contain opacity-[0.07] dark:opacity-[0.15]"
-          priority
-        />
+    <div className="relative mx-auto max-w-4xl px-6 py-20 lg:py-32">
+      {/* Gradient background */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-gradient-to-br from-primary/20 to-accent/10 blur-3xl dark:from-primary/10 dark:to-accent/5"></div>
+        <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-gradient-to-tr from-accent/20 to-primary/10 blur-3xl dark:from-accent/10 dark:to-primary/5"></div>
       </div>
 
       <div className="relative text-center">
-        <p className="mt-4 text-2xl font-bold text-foreground md:text-3xl">
-          La chaîne des mises en garde et critiques entre savants et étudiants.
-        </p>
-        <p className="mx-auto mt-4 max-w-2xl text-base text-muted md:text-lg">
+        {/* Main title with gradient text */}
+        <h1 className="mb-6 text-4xl font-bold leading-tight md:text-5xl lg:text-6xl">
+          <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent dark:from-primary-light dark:via-accent dark:to-primary-light">
+            La chaîne des mises en garde et critiques
+          </span>
+          <br />
+          <span className="text-foreground">entre savants et étudiants</span>
+        </h1>
+
+        {/* Subtitle */}
+        <p className="mx-auto mt-8 max-w-2xl text-lg text-muted md:text-xl">
           Si tu n&apos;écoutes plus un savant ou un étudiant parce qu&apos;un autre l&apos;a
           mis en garde ou critiqué, sache que ce même savant ou étudiant a aussi été mis en garde ou critiqué.
         </p>
       </div>
 
-      <div className="relative mt-12">
+      <div className="relative mt-16">
         <SearchBar />
       </div>
     </div>
