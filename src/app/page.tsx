@@ -12,7 +12,7 @@ export default function Home() {
       <div className="relative text-center">
         {/* Main title with gradient text */}
         <h1 className="mb-6 text-4xl font-bold leading-tight md:text-5xl lg:text-6xl">
-          <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent dark:from-primary-light dark:via-accent dark:to-primary-light">
+          <span className="bg-gradient-to-r from-foreground to-accent bg-clip-text text-transparent dark:from-white dark:to-accent">
             La chaîne des mises en garde et critiques
           </span>
           <br />
