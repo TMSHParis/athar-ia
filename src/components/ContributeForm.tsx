@@ -126,9 +126,8 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Vérifier le captcha seulement si hCaptcha est configuré
-    const hcaptchaEnabled = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY;
-    if (hcaptchaEnabled && !captchaToken) {
+    // Vérifier le captcha
+    if (!captchaToken) {
       setStatus("error");
       alert("Veuillez vérifier le captcha");
       return;
@@ -144,9 +143,6 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
       formData.scholarTo === "__new__"
         ? formData.scholarToNew
         : formData.scholarTo;
-
-    // Générer un token de test si hCaptcha n'est pas configuré
-    const tokenToUse = captchaToken || "dev-mode-test-token";
 
     try {
       const SCRIPT_URL =
@@ -180,7 +176,7 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
           submitterName: formData.submitterName,
           submitterContact: formData.submitterContact,
           date: new Date().toISOString(),
-          captchaToken: tokenToUse,
+          captchaToken,
           fileData,
           fileName,
           fileMimeType,
@@ -502,28 +498,21 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
         </div>
       </fieldset>
 
-      {/* hCaptcha - only shown if configured */}
-      {process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY && (
-        <div className="flex justify-center">
-          <HCaptcha
-            ref={captchaRef}
-            sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY}
-            onVerify={(token) => setCaptchaToken(token)}
-            theme="light"
-            size="normal"
-          />
-        </div>
-      )}
-      {!process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY && (
-        <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/10 p-3 text-center text-sm text-yellow-700 dark:text-yellow-500">
-          Mode développement: captcha désactivé. Configurez hCaptcha pour la production.
-        </div>
-      )}
+      {/* hCaptcha */}
+      <div className="flex justify-center">
+        <HCaptcha
+          ref={captchaRef}
+          sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
+          onVerify={(token) => setCaptchaToken(token)}
+          theme="light"
+          size="normal"
+        />
+      </div>
 
       {/* Bouton d'envoi */}
       <button
         type="submit"
-        disabled={status === "sending" || (process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY && !captchaToken)}
+        disabled={status === "sending" || !captchaToken}
         className="w-full rounded-lg bg-primary px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-light disabled:opacity-50"
       >
         {status === "sending"

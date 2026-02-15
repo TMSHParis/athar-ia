@@ -33,11 +33,6 @@ function checkRateLimit(ip: string): boolean {
 }
 
 async function verifyCaptcha(token: string): Promise<boolean> {
-  // Mode développement: accepter les tokens de test
-  if (token === "dev-mode-test-token") {
-    return true;
-  }
-
   try {
     const response = await fetch("https://hcaptcha.com/siteverify", {
       method: "POST",
