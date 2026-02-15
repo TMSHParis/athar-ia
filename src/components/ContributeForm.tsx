@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 const SOURCE_TYPES = [
   { value: "texte", label: "Texte / Écrit" },
@@ -43,9 +42,7 @@ interface ContributeFormProps {
 export default function ContributeForm({ existingScholars }: ContributeFormProps) {
   const [status, setStatus] = useState<FormStatus>("idle");
   const [uploadProgress, setUploadProgress] = useState("");
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const fileInputRefs = useRef<Map<number, HTMLInputElement>>(new Map());
-  const captchaRef = useRef<HCaptcha>(null);
   const [sources, setSources] = useState<SourceEntry[]>([createEmptySource()]);
   const [formData, setFormData] = useState({
     scholarFrom: "",
@@ -125,14 +122,6 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Vérifier le captcha
-    if (!captchaToken) {
-      setStatus("error");
-      alert("Veuillez vérifier le captcha");
-      return;
-    }
-
     setStatus("sending");
 
     const scholarFrom =
@@ -176,7 +165,6 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
           submitterName: formData.submitterName,
           submitterContact: formData.submitterContact,
           date: new Date().toISOString(),
-          captchaToken,
           fileData,
           fileName,
           fileMimeType,
@@ -196,9 +184,6 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
       }
 
       setStatus("success");
-      // Reset captcha
-      captchaRef.current?.resetCaptcha();
-      setCaptchaToken(null);
     } catch {
       setStatus("error");
     } finally {
@@ -498,21 +483,10 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
         </div>
       </fieldset>
 
-      {/* hCaptcha */}
-      <div className="flex justify-center">
-        <HCaptcha
-          ref={captchaRef}
-          sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
-          onVerify={(token) => setCaptchaToken(token)}
-          theme="light"
-          size="normal"
-        />
-      </div>
-
       {/* Bouton d'envoi */}
       <button
         type="submit"
-        disabled={status === "sending" || !captchaToken}
+        disabled={status === "sending"}
         className="w-full rounded-lg bg-primary px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-light disabled:opacity-50"
       >
         {status === "sending"
