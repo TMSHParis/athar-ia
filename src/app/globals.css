@@ -38,7 +38,11 @@
 }
 
 body {
-  background: var(--background);
+  background: linear-gradient(135deg, var(--background) 0%, color-mix(in srgb, var(--accent) 2%, var(--background)) 100%);
   color: var(--foreground);
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dark {
+  background: linear-gradient(135deg, var(--background) 0%, color-mix(in srgb, var(--accent) 1%, var(--background)) 100%);
 }

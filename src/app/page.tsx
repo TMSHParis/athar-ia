@@ -3,12 +3,6 @@ import SearchBar from "@/components/SearchBar";
 export default function Home() {
   return (
     <div className="relative mx-auto max-w-4xl px-6 py-20 lg:py-32">
-      {/* Gradient background */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-gradient-to-br from-primary/20 to-accent/10 blur-3xl dark:from-primary/10 dark:to-accent/5"></div>
-        <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-gradient-to-tr from-accent/20 to-primary/10 blur-3xl dark:from-accent/10 dark:to-primary/5"></div>
-      </div>
-
       <div className="relative text-center">
         {/* Main title with gradient text */}
         <h1 className="mb-6 text-4xl font-bold leading-tight md:text-5xl lg:text-6xl">
