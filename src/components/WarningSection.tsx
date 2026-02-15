@@ -5,21 +5,28 @@ interface WarningSectionProps {
   title: string;
   warnings: Warning[];
   scholarNames: Record<string, string>;
-  icon: string;
+  colorType: "warnedBy" | "hasWarned";
 }
 
 export default function WarningSection({
   title,
   warnings,
   scholarNames,
-  icon,
+  colorType,
 }: WarningSectionProps) {
+  const isWarnedBy = colorType === "warnedBy";
+  const titleColor = isWarnedBy
+    ? "text-foreground dark:text-accent"
+    : "text-accent dark:text-foreground";
+  const bgColor = isWarnedBy
+    ? "bg-foreground/10 dark:bg-accent/20"
+    : "bg-accent/20 dark:bg-foreground/10";
+
   return (
     <div className="rounded-lg border border-border bg-surface p-6">
-      <h2 className="flex items-center gap-2 text-lg font-bold text-foreground">
-        <span>{icon}</span>
+      <h2 className={`flex items-center gap-2 text-lg font-bold ${titleColor}`}>
         <span>{title}</span>
-        <span className="ml-auto rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-medium text-primary">
+        <span className={`ml-auto rounded-full ${bgColor} px-2.5 py-0.5 text-sm font-medium`}>
           {warnings.length}
         </span>
       </h2>
@@ -30,6 +37,7 @@ export default function WarningSection({
               key={index}
               warning={warning}
               scholarName={scholarNames[warning.scholarId] ?? warning.scholarId}
+              colorType={colorType}
             />
           ))}
         </div>

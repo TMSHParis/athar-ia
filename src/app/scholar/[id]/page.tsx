@@ -82,13 +82,13 @@ export default async function ScholarPage({ params }: PageProps) {
           title="A été mis en garde par"
           warnings={scholar.warnedBy}
           scholarNames={scholarNames}
-          icon="⚫"
+          colorType="warnedBy"
         />
         <WarningSection
           title="A mis en garde contre"
           warnings={scholar.hasWarned}
           scholarNames={scholarNames}
-          icon="⭐"
+          colorType="hasWarned"
         />
       </div>
     </div>

@@ -5,14 +5,20 @@ import SourceBadge from "./SourceBadge";
 interface WarningItemProps {
   warning: Warning;
   scholarName: string;
+  colorType: "warnedBy" | "hasWarned";
 }
 
-export default function WarningItem({ warning, scholarName }: WarningItemProps) {
+export default function WarningItem({ warning, scholarName, colorType }: WarningItemProps) {
+  const isWarnedBy = colorType === "warnedBy";
+  const nameColor = isWarnedBy
+    ? "text-foreground dark:text-accent hover:text-foreground/80 dark:hover:text-accent/80"
+    : "text-accent dark:text-foreground hover:text-accent/80 dark:hover:text-foreground/80";
+
   return (
     <div className="border-b border-border py-4 last:border-b-0">
       <Link
         href={`/scholar/${warning.scholarId}`}
-        className="text-base font-semibold text-primary-light transition-colors hover:text-primary"
+        className={`text-base font-semibold transition-colors ${nameColor}`}
       >
         {scholarName}
       </Link>
