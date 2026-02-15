@@ -217,7 +217,7 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
               submitterContact: "",
             });
           }}
-          className="mt-6 rounded-lg bg-accent px-6 py-2.5 text-sm font-medium text-foreground transition-colors hover:opacity-80"
+          className="mt-6 rounded-lg bg-accent px-6 py-2.5 text-sm font-medium text-foreground dark:text-black transition-colors hover:opacity-80"
         >
           Soumettre une autre contribution
         </button>
@@ -487,7 +487,7 @@ export default function ContributeForm({ existingScholars }: ContributeFormProps
       <button
         type="submit"
         disabled={status === "sending"}
-        className="w-full rounded-lg bg-accent px-6 py-3.5 text-sm font-semibold text-foreground dark:text-foreground transition-colors hover:opacity-80 disabled:opacity-50"
+        className="w-full rounded-lg bg-accent px-6 py-3.5 text-sm font-semibold text-foreground dark:text-black transition-colors hover:opacity-80 disabled:opacity-50"
       >
         {status === "sending"
           ? uploadProgress || "Envoi en cours..."
